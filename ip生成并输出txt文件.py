@@ -16,6 +16,7 @@ def write_to_file(ip_range, output_file):
             file.write(ip + '\n')
 
 def main():
+    #修改这里的ip生成范围
     start_ip = '10.0.0.0'
     end_ip = '10.9.225.225'
     output_file = 'ip_addresses.txt'
