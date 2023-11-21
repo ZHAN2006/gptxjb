@@ -1,12 +1,13 @@
 import requests
-import threading
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import logging
 from urllib3.exceptions import InsecureRequestWarning
+import chardet
 import signal
 import sys
+import threading
 
 # 禁用 SSL 证书验证警告
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -21,13 +22,12 @@ with open('web.txt', 'r', encoding='utf-8') as file:
 # 创建一个锁，以确保多线程写文件时不会发生冲突
 lock = threading.Lock()
 
-# 用于捕获 Ctrl+C 信号的标志
-exit_signal = False
+# 用于捕获 Ctrl+C 信号的事件
+exit_event = threading.Event()
 
 # 定义一个信号处理函数
 def signal_handler(signal, frame):
-    global exit_signal
-    exit_signal = True
+    exit_event.set()
     print('\nCtrl+C detected. Exiting gracefully.')
 
 # 注册信号处理函数
@@ -35,35 +35,28 @@ signal.signal(signal.SIGINT, signal_handler)
 
 # 定义一个函数，用于访问网页并写入文件
 def process_url(url):
-    global exit_signal  # 使用全局变量标志是否接收到 Ctrl+C 信号
+    if exit_event.is_set():
+        return
+    
     url = url.strip()  # 去除换行符和空格
 
     try:
         # 发送HTTP请求获取网页内容，禁用SSL证书验证
         response = requests.get(url, verify=False)
 
-        # 检查是否接收到 Ctrl+C 信号
-        if exit_signal:
-            return
+        # 获取网页内容的编码
+        encoding = chardet.detect(response.content)['encoding']
 
-        # 检查请求是否成功
-        if response.status_code == 200:
-            # 获取网页内容的编码
-            encoding = response.encoding
+        # 使用BeautifulSoup解析HTML内容，指定编码
+        soup = BeautifulSoup(response.content, 'html.parser', from_encoding=encoding)
 
-            # 使用BeautifulSoup解析HTML内容，指定编码
-            soup = BeautifulSoup(response.content, 'html.parser', from_encoding=encoding)
+        # 获取网页标题
+        title = soup.title.string if soup.title else 'No Title'
 
-            # 获取网页标题
-            title = soup.title.string if soup.title else 'No Title'
-
-            # 将网页标题写入txt文件
-            with lock:
-                with open('titles.txt', 'a', encoding='utf-8') as output_file:
-                    output_file.write(f'{url}: {title}\n')
-        else:
-            logging.error(f'Failed to fetch {url}. Status code: {response.status_code}')
-
+        # 将网页标题写入txt文件
+        with lock:
+            with open('titles.txt', 'a', encoding='utf-8') as output_file:
+                output_file.write(f'{url}: {title}\n')
     except Exception as e:
         logging.error(f'Error processing {url}: {str(e)}')
 
@@ -86,7 +79,7 @@ with ThreadPoolExecutor(max_threads) as executor:
             pbar.update(1)
             
             # 检查是否接收到 Ctrl+C 信号
-            if exit_signal:
+            if exit_event.is_set():
                 break
 
 print('任务完成！')
