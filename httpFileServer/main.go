@@ -54,11 +54,25 @@ func printServerInfo() {
 }
 
 func startServer() {
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), http.FileServer(http.Dir(dir)))
+	logFile, err := os.Create("server.log")
+	if err != nil {
+		log.Fatal("Error creating log file: ", err)
+	}
+	defer logFile.Close()
+
+	logger := log.New(logFile, "", log.LstdFlags)
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		logger.Printf("Request from %s: %s %s", r.RemoteAddr, r.Method, r.URL.Path)
+		http.FileServer(http.Dir(dir)).ServeHTTP(w, r)
+	})
+
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
+
 
 func getIntranetIP() string {
 	addrs, err := net.InterfaceAddrs()
