@@ -34,4 +34,5 @@ httpFileServer用法:
   -d string         指定要服务的目录（默认值 .）
 ```
 
-
+<h3>注</h3>
+此项目使用了<a href="https://github.com/Demired/SimpleFileServer">SimpleFileServer</a>的部分代码
