@@ -8,31 +8,30 @@ Windows 下编译 Windows 64 位版本
 ```
 SET GOOS=windows
 SET GOARCH=amd64
-go build -o httpFileServer.exe
+go build -o ProxySockhttp.exe
 ```
 
 Windows 下编译 Linux 64 位版本
 ```
 SET GOOS=linux
 SET GOARCH=amd64
-go build -o httpFileServer
+go build -o ProxySockhttp
 ```
 
 Windows 下编译 macOS 64 位版本
 ```
 SET GOOS=darwin
 SET GOARCH=amd64
-go build -o httpFileServer.app
+go build -o ProxySockhttp.app
 ```
 
 <h1>使用方法</h1>
 
 ```
-httpFileServer用法:
-  -h                显示帮助
-  -p int            指定要侦听的端口（默认值 8081）
-  -d string         指定要服务的目录（默认值 .）
+ProxySockhttp用法:
+  -h    显示帮助信息
+  -l string
+        连接到的SOCKS5代理服务器的地址 (default ":1080")
+  -s string
+        代理服务器监听的地址 (default ":8800")
 ```
-
-<h3>注</h3>
-此项目使用了<a href="https://github.com/Demired/SimpleFileServer">SimpleFileServer</a>的部分代码
