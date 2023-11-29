@@ -9,8 +9,8 @@ import (
 	"os"
 )
 
-var dir string = "."
-var port int = 8081
+var dir = "."
+var port = 8081
 
 func main() {
 	// 使用 flag 包来处理命令行参数
@@ -29,21 +29,6 @@ func main() {
 	startServer()
 }
 
-func processIP(ip string) {
-	// You can add validation for the IP address if needed
-	// For now, just set it as the specified IP
-}
-
-func processDir(d string) {
-	stat, err := os.Stat(d)
-	if err == nil && stat.IsDir() {
-		dir = d
-	} else {
-		fmt.Println("Invalid directory specified.")
-		os.Exit(1)
-	}
-}
-
 func printServerInfo() {
 	fmt.Printf("listen port is %d\n", port)
 	fmt.Printf("| loc address : http://127.0.0.1:%d\n", port)
@@ -58,33 +43,37 @@ func startServer() {
 	if err != nil {
 		log.Fatal("Error creating log file: ", err)
 	}
-	defer logFile.Close()
+	defer func(logFile *os.File) {
+		err := logFile.Close()
+		if err != nil {
+
+		}
+	}(logFile)
 
 	logger := log.New(logFile, "", log.LstdFlags)
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		logger.Printf("Request from %s: %s %s", r.RemoteAddr, r.Method, r.URL.Path)
 		http.FileServer(http.Dir(dir)).ServeHTTP(w, r)
 	})
 
-	err = http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), handler)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
 
-
 func getIntranetIP() string {
-	addrs, err := net.InterfaceAddrs()
+	adders, err := net.InterfaceAddrs()
 
 	if err != nil {
 		return ""
 	}
 
-	for _, address := range addrs {
-		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-			if ipnet.IP.To4() != nil {
-				return ipnet.IP.String()
+	for _, address := range adders {
+		if aspnet, ok := address.(*net.IPNet); ok && !aspnet.IP.IsLoopback() {
+			if aspnet.IP.To4() != nil {
+				return aspnet.IP.String()
 			}
 		}
 	}
