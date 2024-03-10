@@ -35,3 +35,6 @@ go build
         监听的IP地址 (default "0.0.0.0")
 
 ```
+
+<h3>注</h3>
+此项目使用了<a href="github.com/armon/go-socks5">go-socks5</a>为基本
