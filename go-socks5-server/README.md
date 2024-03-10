@@ -28,4 +28,10 @@ go build
 <h1>使用方法</h1>
 
 ```
+ -h    显示命令行选项帮助信息
+  -l int
+        监听的端口 (default 8080)
+  -s string
+        监听的IP地址 (default "0.0.0.0")
+
 ```
