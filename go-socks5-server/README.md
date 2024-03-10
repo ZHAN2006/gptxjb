@@ -37,4 +37,4 @@ go build
 ```
 
 <h3>注</h3>
-此项目使用了<a href="github.com/armon/go-socks5">go-socks5</a>为基本
+此项目使用了<a href="https://github.com/armon/go-socks5">go-socks5</a>为基本
