@@ -8,21 +8,21 @@ Windows 下编译 Windows 64 位版本
 ```
 SET GOOS=windows
 SET GOARCH=amd64
-go build -o httpFileServer.exe
+go build
 ```
 
 Windows 下编译 Linux 64 位版本
 ```
 SET GOOS=linux
 SET GOARCH=amd64
-go build -o httpFileServer
+go build
 ```
 
 Windows 下编译 macOS 64 位版本
 ```
 SET GOOS=darwin
 SET GOARCH=amd64
-go build -o httpFileServer.app
+go build
 ```
 
 <h1>使用方法</h1>
