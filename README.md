@@ -22,9 +22,15 @@
   ProxySockhttp:socks5转http工具
 </p>
 <p>
-  go-socks5-server:简易socks5服务器
+  ProxySockhttp:socks5转http工具
 </p>
 <p>
-  cupp:CUPP - 通用用户密码分析器汉化版
+  ProxySockhttp:socks5转http工具
+</p>
+<p>
+  centos7sjgcc:centos7升级gcc脚本
+</p>
+<p>
+  centos7sjpythonsj:centos7升级python脚本
 </p>
 <h4>
