@@ -22,12 +22,6 @@
   ProxySockhttp:socks5转http工具
 </p>
 <p>
-  ProxySockhttp:socks5转http工具
-</p>
-<p>
-  ProxySockhttp:socks5转http工具
-</p>
-<p>
   centos7sjgcc:centos7升级gcc脚本
 </p>
 <p>
