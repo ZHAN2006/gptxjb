@@ -1,0 +1,11 @@
+[Unit]
+Description=监控SSH登录并通过企业微信机器人发送警告消息
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/qywxsshjc/qywxsshjc.py
+Restart=alway
+
+[Install]
+WantedBy=multi-user.target
+
