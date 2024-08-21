@@ -34,6 +34,6 @@
   wjglq:phpweb文件管理器方便在虚拟主机上使用一个PHP文件即可管理和绕过文件上传限制
 </p>
 <p>
-  goby poc:goby自定义poc
+  goby-poc:goby自定义poc
 </p>
 <h4>
